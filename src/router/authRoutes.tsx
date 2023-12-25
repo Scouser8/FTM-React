@@ -1,10 +1,16 @@
-import Login from "../components/Auth/Login";
-import Register from "../components/Auth/Register";
-import { Route } from "../types/router.types";
+import UserAuthentication from "../components/Forms/Auth/UserAuthentication";
+import { APP_ROUTES } from "../constants/routes";
+import { ReactRouterRoute } from "../types/router.types";
 
-const routes: Route[] = [
-  { path: "/login", element: <Login /> },
-  { path: "/register", element: <Register /> },
+const routes: ReactRouterRoute[] = [
+  {
+    path: APP_ROUTES.REGISTER,
+    element: <UserAuthentication route={APP_ROUTES.REGISTER} />,
+  },
+  {
+    path: APP_ROUTES.LOGIN,
+    element: <UserAuthentication route={APP_ROUTES.LOGIN} />,
+  },
 ];
 
 export default routes;

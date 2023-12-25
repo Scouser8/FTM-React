@@ -1,6 +1,9 @@
 import Home from "../components/Home";
-import { Route } from "../types/router.types";
+import { APP_ROUTES } from "../constants/routes";
+import { ReactRouterRoute } from "../types/router.types";
 
-const routes: Route[] = [{ path: "/", element: <Home /> }];
+const routes: ReactRouterRoute[] = [
+  { path: APP_ROUTES.HOME, element: <Home /> },
+];
 
 export default routes;
