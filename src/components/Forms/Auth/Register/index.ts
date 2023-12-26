@@ -1,3 +1,3 @@
-import Register from "./Register";
+import RegisterFormContainer from "./RegisterFormContainer";
 
-export default Register;
+export default RegisterFormContainer;

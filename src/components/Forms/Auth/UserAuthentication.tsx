@@ -16,7 +16,7 @@ const userAuthForms: UserAuthForms = {
 function UserAuthentication(props: Props) {
   const { route } = props;
   return (
-    <Grid container component="main" sx={{ height: "90vh" }}>
+    <Grid container component="main" sx={{ height: "100vh" }}>
       <Grid
         item
         xs={false}

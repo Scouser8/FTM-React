@@ -1,26 +1,33 @@
 import { Link } from "react-router-dom";
+
+import { APP_ROUTES } from "../../../../constants/routes";
+
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import MuiLink from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
+
+import ShowPassword from "../ShowPassword";
 import UserFormFooter from "../UserFormFooter";
-import { APP_ROUTES } from "../../../../constants/routes";
 
 type Props = {
   handleSubmit: (
     e?: React.BaseSyntheticEvent<object, any, any> | undefined
   ) => Promise<void>;
   register: Function;
+  showPassword: boolean;
+  handleToggleShowPassword: () => void;
 };
 
 function LoginFormView(props: Props) {
-  const { handleSubmit, register } = props;
+  const { handleSubmit, register, showPassword, handleToggleShowPassword } =
+    props;
   return (
     <Box
       sx={{
@@ -37,7 +44,7 @@ function LoginFormView(props: Props) {
       <Typography component="h1" variant="h5">
         Welcome to FTM App
       </Typography>
-      <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+      <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
         <TextField
           margin="normal"
           required
@@ -52,7 +59,15 @@ function LoginFormView(props: Props) {
           required
           fullWidth
           label="Password"
-          type="password"
+          type={showPassword ? "text" : "password"}
+          InputProps={{
+            endAdornment: (
+              <ShowPassword
+                showPassword={showPassword}
+                handleToggleShowPassword={handleToggleShowPassword}
+              />
+            ),
+          }}
           autoComplete="current-password"
           {...register("password")}
         />
@@ -68,7 +83,7 @@ function LoginFormView(props: Props) {
         >
           Sign In
         </Button>
-        <Grid container sx={{ mb: 2 }}>
+        <Grid container sx={{ mb: 3 }}>
           <Grid item xs>
             <MuiLink href="#" variant="body2">
               Forgot password?
