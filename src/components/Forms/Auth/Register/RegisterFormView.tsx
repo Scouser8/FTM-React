@@ -13,79 +13,14 @@ import ShowPassword from "../ShowPassword";
 import { useMemo } from "react";
 
 type Props = {
+  fields: JSX.Element[];
   handleSubmit: (
     e?: React.BaseSyntheticEvent<object, any, any> | undefined
   ) => Promise<void>;
-  register: Function;
-  showPassword: boolean;
-  handleToggleShowPassword: () => void;
-  errors: any;
 };
 
 function LoginFormView(props: Props) {
-  const {
-    handleSubmit,
-    register,
-    showPassword,
-    handleToggleShowPassword,
-    errors,
-  } = props;
-
-  const fields = useMemo(
-    () => [
-      {
-        wrapperProps: { gridSizes: { md: 6 } },
-        fieldProps: { name: "firstName", label: "First Name" },
-      },
-      {
-        wrapperProps: { gridSizes: { md: 6 } },
-        fieldProps: { name: "lastName", label: "Last Name" },
-      },
-      { fieldProps: { name: "email", label: "Email" } },
-      {
-        fieldProps: {
-          name: "password",
-          label: "Password",
-          InputProps: {
-            endAdornment: (
-              <ShowPassword
-                showPassword={showPassword}
-                handleToggleShowPassword={handleToggleShowPassword}
-              />
-            ),
-          },
-        },
-      },
-      {
-        fieldProps: {
-          name: "confirmPassword",
-          label: "Confirm Password",
-          InputProps: {
-            endAdornment: (
-              <ShowPassword
-                showPassword={showPassword}
-                handleToggleShowPassword={handleToggleShowPassword}
-              />
-            ),
-          },
-        },
-      },
-    ],
-    [showPassword, handleToggleShowPassword]
-  );
-
-  const formFields = fields?.map(({ fieldProps, wrapperProps }) => (
-    <Grid item xs={12} {...wrapperProps?.gridSizes}>
-      <TextField
-        key={name}
-        fullWidth
-        error={errors[fieldProps?.name]}
-        helperText={errors[fieldProps?.name]?.message}
-        {...register(fieldProps?.name)}
-        {...fieldProps}
-      />
-    </Grid>
-  ));
+  const { fields, handleSubmit } = props;
 
   return (
     <Box
@@ -105,7 +40,7 @@ function LoginFormView(props: Props) {
       </Typography>
       <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
         <Grid container spacing={2}>
-          {formFields}
+          {fields}
         </Grid>
         <Button
           type="submit"

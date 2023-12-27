@@ -4,7 +4,6 @@ import { APP_ROUTES } from "../../../../constants/routes";
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import MuiLink from "@mui/material/Link";
@@ -13,21 +12,18 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 
-import ShowPassword from "../ShowPassword";
 import UserFormFooter from "../UserFormFooter";
 
 type Props = {
+  fields: JSX.Element[];
   handleSubmit: (
     e?: React.BaseSyntheticEvent<object, any, any> | undefined
   ) => Promise<void>;
-  register: Function;
-  showPassword: boolean;
-  handleToggleShowPassword: () => void;
 };
 
 function LoginFormView(props: Props) {
-  const { handleSubmit, register, showPassword, handleToggleShowPassword } =
-    props;
+  const { fields, handleSubmit } = props;
+
   return (
     <Box
       sx={{
@@ -45,32 +41,7 @@ function LoginFormView(props: Props) {
         Welcome to FTM App
       </Typography>
       <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          label="Email Address"
-          autoComplete="email"
-          autoFocus
-          {...register("email")}
-        />
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          label="Password"
-          type={showPassword ? "text" : "password"}
-          InputProps={{
-            endAdornment: (
-              <ShowPassword
-                showPassword={showPassword}
-                handleToggleShowPassword={handleToggleShowPassword}
-              />
-            ),
-          }}
-          autoComplete="current-password"
-          {...register("password")}
-        />
+        {fields}
         <FormControlLabel
           control={<Checkbox value="remember" color="primary" />}
           label="Remember me"
