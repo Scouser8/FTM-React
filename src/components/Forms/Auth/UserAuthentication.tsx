@@ -9,6 +9,7 @@ import { Grid, Paper } from "@mui/material";
 
 import Register from "./Register";
 import Login from "./Login";
+import { Navigate } from "react-router-dom";
 
 type Props = {
   route: Route;
@@ -22,7 +23,11 @@ const userAuthForms: UserAuthForms = {
 function UserAuthentication(props: Props) {
   const { route } = props;
   const user = useSelector(getUser);
-  console.log("User:", user);
+
+  if (user) {
+    return <Navigate to={APP_ROUTES.HOME} replace />;
+  }
+
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
       <Grid

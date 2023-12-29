@@ -2,6 +2,8 @@ import { useSelector } from "react-redux";
 
 import { getUser } from "../../store/selectors/user";
 
+import { Box } from "@mui/material";
+
 import Header from "./Header";
 import Footer from "./Footer";
 
@@ -16,7 +18,9 @@ export default function Layout(props: Props) {
   return (
     <>
       {user && <Header />}
-      {children}
+      <Box component="main" sx={{ px: 10, py: 5 }}>
+        {children}
+      </Box>
       {user && <Footer />}
     </>
   );

@@ -1,18 +1,12 @@
 import { Box, Container, Typography } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+
+import footerStyles from "../../styles/footer.styles";
 
 function Footer() {
+  const theme = useTheme();
   return (
-    <Box
-      component="footer"
-      sx={{
-        py: 0.5,
-        mt: "auto",
-        backgroundColor: (theme) =>
-          theme.palette.mode === "light"
-            ? theme.palette.grey[200]
-            : theme.palette.grey[800],
-      }}
-    >
+    <Box component="footer" sx={footerStyles(theme)}>
       <Container sx={{ display: "flex", justifyContent: "center" }}>
         <Typography variant="body1">
           Senior Frontend Developer Task (Giza Systems) -

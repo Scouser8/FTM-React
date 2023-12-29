@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -9,8 +8,6 @@ import Typography from "@mui/material/Typography";
 import UserFormFooter from "../UserFormFooter";
 
 import { APP_ROUTES } from "../../../../constants/routes";
-import ShowPassword from "../ShowPassword";
-import { useMemo } from "react";
 
 type Props = {
   fields: JSX.Element[];

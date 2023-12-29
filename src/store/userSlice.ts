@@ -30,12 +30,12 @@ type UsersState = {
 };
 
 const initialState: UsersState = {
-  // user: {
-  //   email: "staticUser@email.com",
-  //   firstName: "Static",
-  //   lastName: "User",
-  // },
-  user: undefined,
+  user: {
+    email: "staticUser@email.com",
+    firstName: "Static",
+    lastName: "User",
+  },
+  // user: undefined,
   loading: false,
 };
 

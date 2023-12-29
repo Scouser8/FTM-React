@@ -1,5 +1,8 @@
+import { Box } from "@mui/material";
+import headerStyles from "../../styles/header.styles";
+
 function Header() {
-  return <div>Flight Ticket Management App</div>;
+  return <Box sx={headerStyles}>Flight Ticket Management App</Box>;
 }
 
 export default Header;

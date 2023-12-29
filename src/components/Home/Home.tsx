@@ -1,3 +1,5 @@
+import FlightTickets from "../Flights";
+
 export default function Home() {
-  return <div>Home</div>;
+  return <FlightTickets />;
 }
