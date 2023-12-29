@@ -1,8 +1,13 @@
-import { Grid, Paper } from "@mui/material";
+import { useSelector } from "react-redux";
+
 import { Route, UserAuthForms } from "../../../types/router.types";
 import { APP_ROUTES } from "../../../constants/routes";
+
+import { Grid, Paper } from "@mui/material";
+
 import Register from "./Register";
 import Login from "./Login";
+
 
 type Props = {
   route: Route;
@@ -15,6 +20,8 @@ const userAuthForms: UserAuthForms = {
 
 function UserAuthentication(props: Props) {
   const { route } = props;
+  const user = useSelector((state: any) => state.user);
+  console.log("User:", user);
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
       <Grid
