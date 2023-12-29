@@ -1,7 +1,7 @@
 import { APP_ROUTES } from "./../constants/routes";
 
 export type ReactRouterRoute = {
-  path: string;
+  path?: string;
   element: React.ReactNode;
   children?: ReactRouterRoute[];
 };

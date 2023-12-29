@@ -6,29 +6,23 @@ import {
 import axios from "../axios";
 import { User } from "../types/store.types";
 
-const addNewUser = createAsyncThunk(
-  "user/add",
-  async (newUser, thunkAPI) => {
-    try {
-      const res = await axios.post("user", newUser);
-      return res.data;
-    } catch (err) {
-      console.log(err);
-    }
+const addNewUser = createAsyncThunk("user/add", async (newUser, thunkAPI) => {
+  try {
+    const res = await axios.post("user", newUser);
+    return res.data;
+  } catch (err) {
+    console.log(err);
   }
-);
+});
 
-const userLogin = createAsyncThunk(
-  "user/login",
-  async (userInfo, thunkAPI) => {
-    try {
-      const res = await axios.post("user", userInfo);
-      return res.data;
-    } catch (err) {
-      console.log(err);
-    }
+const userLogin = createAsyncThunk("user/login", async (userInfo, thunkAPI) => {
+  try {
+    const res = await axios.post("user", userInfo);
+    return res.data;
+  } catch (err) {
+    console.log(err);
   }
-);
+});
 
 type UsersState = {
   user: User | undefined;
@@ -36,11 +30,12 @@ type UsersState = {
 };
 
 const initialState: UsersState = {
-  user: {
-    email: "staticUser@email.com",
-    firstName: "Static",
-    lastName: "User",
-  },
+  // user: {
+  //   email: "staticUser@email.com",
+  //   firstName: "Static",
+  //   lastName: "User",
+  // },
+  user: undefined,
   loading: false,
 };
 

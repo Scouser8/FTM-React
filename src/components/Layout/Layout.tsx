@@ -1,4 +1,7 @@
-import React from "react";
+import { useSelector } from "react-redux";
+
+import { getUser } from "../../store/selectors/user";
+
 import Header from "./Header";
 import Footer from "./Footer";
 
@@ -8,11 +11,13 @@ type Props = {
 
 export default function Layout(props: Props) {
   const { children } = props;
+  const { user } = useSelector(getUser);
+  console.log("User:", user);
   return (
     <>
-      <Header />
+      {user && <Header />}
       {children}
-      <Footer />
+      {user && <Footer />}
     </>
   );
 }
