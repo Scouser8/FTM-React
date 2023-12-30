@@ -14,13 +14,10 @@ type Props = {
 export default function Layout(props: Props) {
   const { children } = props;
   const { user } = useSelector(getUser);
-  console.log("User:", user);
   return (
     <>
       {user && <Header />}
-      <Box component="main" sx={{ px: 10, py: 5 }}>
-        {children}
-      </Box>
+      <Box component="main">{children}</Box>
       {user && <Footer />}
     </>
   );

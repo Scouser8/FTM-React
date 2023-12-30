@@ -5,38 +5,49 @@ import {
 } from "@reduxjs/toolkit";
 import axios from "../axios";
 import { User } from "../types/store.types";
+import {
+  USER_AUTH_FAILED,
+  USER_AUTH_PENDING,
+  USER_LOGIN_SUCCESSFUL,
+  USER_REGISTRATION_SUCCESSFUL,
+} from "../constants/thunk-status";
 
-const addNewUser = createAsyncThunk("user/add", async (newUser, thunkAPI) => {
-  try {
-    const res = await axios.post("user", newUser);
-    return res.data;
-  } catch (err) {
-    console.log(err);
+export const userRegister = createAsyncThunk(
+  "user/add",
+  async (newUser: User, thunkAPI) => {
+    try {
+      const res = await axios.post("/signup", newUser);
+      return res.data;
+    } catch (err) {
+      console.log(err);
+    }
   }
-});
+);
 
-const userLogin = createAsyncThunk("user/login", async (userInfo, thunkAPI) => {
-  try {
-    const res = await axios.post("user", userInfo);
-    return res.data;
-  } catch (err) {
-    console.log(err);
+export const userLogin = createAsyncThunk(
+  "user/login",
+  async (userInfo, thunkAPI) => {
+    try {
+      const res = await axios.post("login", userInfo);
+      return res.data;
+    } catch (err) {
+      console.log(err);
+    }
   }
-});
+);
 
 type UsersState = {
-  user: User | undefined;
-  loading?: boolean;
+  user: User | null;
+  token: string | null;
+  status: string;
+  error: unknown;
 };
 
 const initialState: UsersState = {
-  user: {
-    email: "staticUser@email.com",
-    firstName: "Static",
-    lastName: "User",
-  },
-  // user: undefined,
-  loading: false,
+  user: null,
+  token: null,
+  status: "idle",
+  error: null,
 };
 
 const userSlice = createSlice({
@@ -45,14 +56,28 @@ const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder: ActionReducerMapBuilder<UsersState>) => {
     builder
-      .addCase(addNewUser.pending, (state, action) => {
-        return state;
+      .addCase(userRegister.pending, (state) => {
+        state.status = USER_AUTH_PENDING;
       })
-      .addCase(addNewUser.fulfilled, (state, action) => {
-        return state;
+      .addCase(userRegister.fulfilled, (state) => {
+        state.status = USER_REGISTRATION_SUCCESSFUL;
       })
-      .addCase(addNewUser.rejected, (state, action) => {
-        return state;
+      .addCase(userRegister.rejected, (state, action) => {
+        state.status = USER_AUTH_FAILED;
+        state.error = action.payload;
+      })
+      .addCase(userLogin.pending, (state) => {
+        state.status = USER_AUTH_PENDING;
+        state.token = null;
+      })
+      .addCase(userLogin.fulfilled, (state, action) => {
+        state.status = USER_LOGIN_SUCCESSFUL;
+        state.user = action.payload.user;
+        state.token = action.payload.accessToken;
+      })
+      .addCase(userLogin.rejected, (state, action) => {
+        state.status = USER_AUTH_FAILED;
+        state.error = action.payload;
       });
   },
 });

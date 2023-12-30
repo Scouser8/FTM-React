@@ -22,7 +22,7 @@ const userAuthForms: UserAuthForms = {
 
 function UserAuthentication(props: Props) {
   const { route } = props;
-  const user = useSelector(getUser);
+  const { user } = useSelector(getUser);
 
   if (user) {
     return <Navigate to={APP_ROUTES.HOME} replace />;

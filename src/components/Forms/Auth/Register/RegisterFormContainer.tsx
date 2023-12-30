@@ -12,6 +12,16 @@ import TextField from "@mui/material/TextField";
 
 import ShowPassword from "../ShowPassword";
 import RegisterFormView from "./RegisterFormView";
+import { useDispatch, useSelector } from "react-redux";
+import { userRegister } from "../../../../store/userSlice";
+import { AppDispatch } from "../../../../types/store.types";
+import { getUser } from "../../../../store/selectors/user";
+import {
+  USER_AUTH_PENDING,
+  USER_REGISTRATION_SUCCESSFUL,
+} from "../../../../constants/thunk-status";
+import { redirect, useNavigate } from "react-router-dom";
+import { APP_ROUTES } from "../../../../constants/routes";
 
 type FormValues = {
   email: string;
@@ -40,11 +50,25 @@ export default function LoginFormContainer() {
   });
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch<AppDispatch>();
+  const { status } = useSelector(getUser);
+
+  const isSubmitting = status === USER_AUTH_PENDING;
+
+  if (status === USER_REGISTRATION_SUCCESSFUL) {
+    navigate(APP_ROUTES.LOGIN);
+  }
+
   const handleToggleShowPassword = () =>
     setShowPassword((prevState) => !prevState);
 
   const onSubmit = (data: FormValues) => {
-    console.log(data);
+    const { email, password, firstName, lastName } = data;
+    const payload = { email, password, firstName, lastName };
+    dispatch(userRegister(payload));
+    redirect(APP_ROUTES.LOGIN);
   };
 
   const fields: Field<FormValues>[] = useMemo(
@@ -109,6 +133,7 @@ export default function LoginFormContainer() {
     <RegisterFormView
       fields={formFields}
       handleSubmit={handleSubmit(onSubmit)}
+      isSubmitting={isSubmitting}
     />
   );
 }

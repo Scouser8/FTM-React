@@ -8,17 +8,17 @@ import Typography from "@mui/material/Typography";
 import UserFormFooter from "../UserFormFooter";
 
 import { APP_ROUTES } from "../../../../constants/routes";
-import { Stack } from "@mui/material";
 
 type Props = {
   fields: JSX.Element[];
   handleSubmit: (
     e?: React.BaseSyntheticEvent<object, any, any> | undefined
   ) => Promise<void>;
+  isSubmitting: boolean;
 };
 
 function LoginFormView(props: Props) {
-  const { fields, handleSubmit } = props;
+  const { fields, handleSubmit, isSubmitting } = props;
 
   return (
     <Box
@@ -45,6 +45,7 @@ function LoginFormView(props: Props) {
           fullWidth
           variant="contained"
           sx={{ mt: 2, mb: 2 }}
+          disabled={isSubmitting}
         >
           Register
         </Button>

@@ -2,6 +2,7 @@ import { useState } from "react";
 import FlightTickets from "../Flights";
 import HomeHeader from "./HomeHeader";
 import FlightTicketFormContainer from "../Forms/FlightTicketForm";
+import { Box } from "@mui/material";
 
 export default function Home() {
   const [isFormDialogOpen, setIsFormDialogOpen] = useState<boolean>(false);
@@ -11,7 +12,7 @@ export default function Home() {
   const closeFormDialog = () => setIsFormDialogOpen(false);
 
   return (
-    <>
+    <Box sx={{ px: 10, py: 5 }}>
       <HomeHeader openTicketForm={openFormDialog} />
       <FlightTickets />
       {isFormDialogOpen && (
@@ -20,6 +21,6 @@ export default function Home() {
           handleCloseFormDialog={closeFormDialog}
         />
       )}
-    </>
+    </Box>
   );
 }

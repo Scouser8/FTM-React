@@ -13,7 +13,7 @@ function HomeHeader(props: Props) {
       </Typography>
       <Button
         variant="outlined"
-        color="warning"
+        color="success"
         startIcon={<AddIcon />}
         onClick={openTicketForm}
       >
