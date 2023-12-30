@@ -19,6 +19,8 @@ import { getUserSelector } from "../../../../store/selectors/user";
 import { USER_AUTH_PENDING } from "../../../../constants/thunk-status";
 import { showSnackbar } from "../../../../store/actions/snackbar";
 import { ERROR, SUCCESS } from "../../../../constants/snack-status";
+import { useNavigate } from "react-router";
+import { APP_ROUTES } from "../../../../constants/routes";
 
 type FormValues = {
   email: string;
@@ -47,6 +49,8 @@ export default function LoginFormContainer() {
   });
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
+  const navigate = useNavigate();
+
   const dispatch = useDispatch<AppDispatch>();
 
   const { status } = useSelector(getUserSelector);
@@ -61,14 +65,15 @@ export default function LoginFormContainer() {
     const payload = { email, password, firstName, lastName };
     await dispatch(userRegister(payload))
       .unwrap()
-      .then(() =>
+      .then(() => {
         dispatch(
           showSnackbar({
-            message: "Account created successfully, welcome to FTP",
+            message: "Account created successfully, welcome to FTM",
             status: SUCCESS,
           })
-        )
-      )
+        );
+        navigate(APP_ROUTES.LOGIN);
+      })
       .catch((error) =>
         dispatch(showSnackbar({ message: error, status: ERROR }))
       );
