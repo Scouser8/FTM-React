@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Box, Typography } from "@mui/material";
 import FlightTicketCard from "./FlightTicketCard";
@@ -57,22 +57,23 @@ export default function FlightTickets() {
   };
 
   const handleOpenDeleteDialog = () => setIsDeleteDialogOpen(true);
-  const handleCloseDeleteDialog = useCallback(() => {
+  const handleCloseDeleteDialog = () => {
     setSelectedTicket(undefined);
     setIsDeleteDialogOpen(false);
-    if (status === FLIGHT_TICKETS_DELETED_SUCCESSFULLY) {
-      dispatch(
-        showSnackbar({
-          message: "Ticket Deleted Successfully",
-          status: INFO,
-        })
-      );
-    }
-  }, [status]);
+  };
 
   const handleDeleteSubmit = () => {
     if (selectedTicket?.id) {
-      dispatch(deleteFlightTicket(selectedTicket?.id));
+      dispatch(deleteFlightTicket(selectedTicket?.id))
+        .unwrap()
+        .then(() => {
+          dispatch(
+            showSnackbar({
+              message: "Ticket Deleted Successfully",
+              status: INFO,
+            })
+          );
+        });
     }
   };
 

@@ -88,7 +88,6 @@ export default function FlightTicketFormContainer(props: Props) {
       status === FLIGHT_TICKETS_UPDATED_SUCCESSFULLY
     ) {
       dispatch(getFlightTickets());
-      afterFormSubmission?.();
     }
   }, [status]);
 
@@ -101,9 +100,17 @@ export default function FlightTicketFormContainer(props: Props) {
     if (editMode && ticketToEdit?.id) {
       dispatch(
         updateFlightTicket({ flightTicket: payload, id: ticketToEdit?.id })
-      );
+      )
+        .unwrap()
+        .then(() => {
+          afterFormSubmission?.();
+        });
     } else {
-      dispatch(createFlightTicket(payload));
+      dispatch(createFlightTicket(payload))
+        .unwrap()
+        .then(() => {
+          afterFormSubmission?.();
+        });
     }
   };
 

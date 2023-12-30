@@ -16,12 +16,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { userRegister } from "../../../../store/userSlice";
 import { AppDispatch } from "../../../../types/store.types";
 import { getUserSelector } from "../../../../store/selectors/user";
-import {
-  USER_AUTH_PENDING,
-  USER_REGISTRATION_SUCCESSFUL,
-} from "../../../../constants/thunk-status";
-import { redirect, useNavigate } from "react-router-dom";
-import { APP_ROUTES } from "../../../../constants/routes";
+import { USER_AUTH_PENDING } from "../../../../constants/thunk-status";
+import { showSnackbar } from "../../../../store/actions/snackbar";
+import { ERROR, SUCCESS } from "../../../../constants/snack-status";
 
 type FormValues = {
   email: string;
@@ -50,26 +47,31 @@ export default function LoginFormContainer() {
   });
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const navigate = useNavigate();
-
   const dispatch = useDispatch<AppDispatch>();
 
   const { status } = useSelector(getUserSelector);
 
   const isSubmitting = status === USER_AUTH_PENDING;
 
-  if (status === USER_REGISTRATION_SUCCESSFUL) {
-    navigate(APP_ROUTES.LOGIN);
-  }
-
   const handleToggleShowPassword = () =>
     setShowPassword((prevState) => !prevState);
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = async (data: FormValues) => {
     const { email, password, firstName, lastName } = data;
     const payload = { email, password, firstName, lastName };
-    dispatch(userRegister(payload));
-    redirect(APP_ROUTES.LOGIN);
+    await dispatch(userRegister(payload))
+      .unwrap()
+      .then(() =>
+        dispatch(
+          showSnackbar({
+            message: "Account created successfully, welcome to FTP",
+            status: SUCCESS,
+          })
+        )
+      )
+      .catch((error) =>
+        dispatch(showSnackbar({ message: error, status: ERROR }))
+      );
   };
 
   const fields: Field<FormValues>[] = useMemo(

@@ -7,7 +7,7 @@ const userRegisterSchema = object({
   lastName: string()
     .required()
     .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed"),
-  email: string().required().email(),
+  email: string().email().required(),
   password: string()
     .matches(
       /^(?!.* )(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!/@_#\$%\^&\*])/,

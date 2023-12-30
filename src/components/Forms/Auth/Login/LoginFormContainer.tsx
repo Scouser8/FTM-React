@@ -11,6 +11,8 @@ import { userLogin } from "../../../../store/userSlice";
 import { AppDispatch } from "../../../../types/store.types";
 import { getUserSelector } from "../../../../store/selectors/user";
 import { USER_AUTH_PENDING } from "../../../../constants/thunk-status";
+import { showSnackbar } from "../../../../store/actions/snackbar";
+import { ERROR, SUCCESS } from "../../../../constants/snack-status";
 
 type FormValues = {
   email: string;
@@ -43,7 +45,16 @@ export default function LoginFormContainer() {
     setShowPassword((prevState) => !prevState);
 
   const onSubmit = (data: FormValues) => {
-    dispatch(userLogin(data));
+    dispatch(userLogin(data))
+      .unwrap()
+      .then(() =>
+        dispatch(
+          showSnackbar({ message: "Logged In Successfully", status: SUCCESS })
+        )
+      )
+      .catch((error) =>
+        dispatch(showSnackbar({ message: error, status: ERROR }))
+      );
   };
 
   const fields: Field<FormValues>[] = useMemo(
