@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { Field } from "../../../types/form.types";
@@ -23,9 +23,17 @@ import {
   FLIGHT_TICKETS_CREATED_SUCCESSFULLY,
   FLIGHT_TICKETS_UPDATED_SUCCESSFULLY,
 } from "../../../constants/thunk-status";
+import {
+  convertDateToString,
+  convertStringToDate,
+  getTomorrow,
+} from "../../../utils";
 
-const FORM_TITLE = "Book your ticket for next flight!";
-const SUBMIT_BUTTON_TEXT = "Book";
+const NEW_FORM_TITLE = "Book your ticket for next flight!";
+const EDIT_FORM_TITLE = "Update your Flight Ticket details";
+
+const NEW_SUBMIT_BUTTON_TEXT = "Book";
+const EDIT_SUBMIT_BUTTON_TEXT = "Update";
 
 type FormValues = {
   flightCode: string;
@@ -53,13 +61,14 @@ export default function FlightTicketFormContainer(props: Props) {
     () => ({
       flightCode: ticketToEdit?.flightCode || "",
       date: ticketToEdit?.date
-        ? dayjs(ticketToEdit?.date, "DD/MM/YYYY")
-        : dayjs(),
+        ? convertStringToDate(ticketToEdit?.date)
+        : getTomorrow(),
       capacity: ticketToEdit?.capacity || 200,
     }),
-    []
+    [ticketToEdit]
   );
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors },
@@ -88,7 +97,7 @@ export default function FlightTicketFormContainer(props: Props) {
     setShowPassword((prevState) => !prevState);
 
   const onSubmit = (data: FormValues) => {
-    const dateString = dayjs(data.date).format("DD/MM/YYYY");
+    const dateString = convertDateToString(data?.date || dayjs());
     const payload: FlightTicket = { ...data, date: dateString };
     if (editMode && ticketToEdit?.id) {
       dispatch(
@@ -101,7 +110,6 @@ export default function FlightTicketFormContainer(props: Props) {
 
   const fields: Field<FormValues>[] = useMemo(
     () => [
-      { fieldProps: { name: "flightCode", label: "Flight Code" } },
       {
         fieldProps: {
           name: "date",
@@ -110,6 +118,7 @@ export default function FlightTicketFormContainer(props: Props) {
           defaultValue: defaultValues.date,
         },
       },
+      { fieldProps: { name: "flightCode", label: "Flight Code" } },
       {
         fieldProps: {
           name: "capacity",
@@ -123,18 +132,26 @@ export default function FlightTicketFormContainer(props: Props) {
 
   const formFields = fields?.map(({ fieldProps }) =>
     fieldProps.type === "date" ? (
-      <DatePicker
-        key={fieldProps?.name}
-        slotProps={{
-          textField: {
-            fullWidth: true,
-            error: !!errors[fieldProps?.name],
-            helperText: errors[fieldProps?.name]?.message,
-            margin: "normal",
-            ...register(fieldProps?.name),
-          },
-        }}
+      <Controller
+        control={control}
         {...fieldProps}
+        render={({ field }) => (
+          <DatePicker
+            key={fieldProps?.name}
+            minDate={getTomorrow()}
+            disableHighlightToday
+            slotProps={{
+              textField: {
+                fullWidth: true,
+                error: !!errors[fieldProps?.name],
+                helperText: errors[fieldProps?.name]?.message,
+                margin: "normal",
+                label: fieldProps.label,
+              },
+            }}
+            {...field}
+          />
+        )}
       />
     ) : (
       <TextField
@@ -155,8 +172,10 @@ export default function FlightTicketFormContainer(props: Props) {
       handleCloseFormDialog={handleCloseFormDialog}
       handleSubmit={handleSubmit(onSubmit)}
       fields={formFields}
-      formDialogTitle={FORM_TITLE}
-      formDialogSubmitText={SUBMIT_BUTTON_TEXT}
+      formDialogTitle={editMode ? EDIT_FORM_TITLE : NEW_FORM_TITLE}
+      formDialogSubmitText={
+        editMode ? EDIT_SUBMIT_BUTTON_TEXT : NEW_SUBMIT_BUTTON_TEXT
+      }
     />
   );
 }

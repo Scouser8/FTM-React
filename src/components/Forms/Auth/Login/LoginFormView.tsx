@@ -68,6 +68,12 @@ function LoginFormView(props: Props) {
         </Grid>
         <UserFormFooter />
       </Box>
+      {/* <Snackbar
+        isOpen={isSnackbarOpen}
+        handleSnackbarClose={handleSnackbarClose}
+        message={snackbarMessage}
+        snackStatus={snackStatus}
+      /> */}
     </Box>
   );
 }

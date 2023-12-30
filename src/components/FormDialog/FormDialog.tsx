@@ -7,6 +7,7 @@ import {
   DEFAULT_CANCEL_BUTTON_TEXT,
   DEFAULT_SUBMIT_BUTTON_TEXT,
 } from "../../constants/dialog";
+import { Box } from "@mui/material";
 
 type Props = {
   isDialogOpen: boolean;
@@ -34,11 +35,15 @@ export default function FormDialog(props: Props) {
   return (
     <Dialog open={isDialogOpen} onClose={handleDialogClose}>
       <DialogTitle>{title}</DialogTitle>
-      <DialogContent>{form}</DialogContent>
-      <DialogActions>
-        <Button onClick={handleDialogClose}>{cancelText}</Button>
-        <Button onClick={handleSubmit}>{submitText}</Button>
-      </DialogActions>
+      <Box component="form">
+        <DialogContent>{form}</DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose}>{cancelText}</Button>
+          <Button onClick={handleSubmit} type="submit">
+            {submitText}
+          </Button>
+        </DialogActions>
+      </Box>
     </Dialog>
   );
 }

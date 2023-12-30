@@ -16,11 +16,12 @@ import { UserLoginInfo, UserRegisterInfo } from "../types/form.types";
 export const userRegister = createAsyncThunk(
   "user/add",
   async (newUser: UserRegisterInfo, thunkAPI) => {
+    const { rejectWithValue } = thunkAPI;
     try {
       const res = await axios.post("/signup", newUser);
       return res.data;
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      return rejectWithValue(err.response.data);
     }
   }
 );
@@ -28,11 +29,12 @@ export const userRegister = createAsyncThunk(
 export const userLogin = createAsyncThunk(
   "user/login",
   async (userInfo: UserLoginInfo, thunkAPI) => {
+    const { rejectWithValue } = thunkAPI;
     try {
       const res = await axios.post("login", userInfo);
       return res.data;
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      return rejectWithValue(err.response.data);
     }
   }
 );
@@ -79,8 +81,8 @@ const userSlice = createSlice({
       })
       .addCase(userLogin.fulfilled, (state, action) => {
         state.status = USER_LOGIN_SUCCESSFUL;
-        state.user = action.payload.user;
-        state.token = action.payload.accessToken;
+        state.user = action.payload?.user;
+        state.token = action.payload?.accessToken;
       })
       .addCase(userLogin.rejected, (state, action) => {
         state.status = USER_AUTH_FAILED;
