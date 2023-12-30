@@ -6,4 +6,10 @@ export type User = {
   lastName: string;
 };
 
+export type FlightTicket = {
+  flightCode: string;
+  date: any;
+  capacity: number;
+};
+
 export type RootState = ReturnType<typeof store.getState>;

@@ -7,10 +7,11 @@ import { Field } from "../../../types/form.types";
 
 import TextField from "@mui/material/TextField";
 
-import AddFlightTicketFormView from "./AddFlightTicketFormView";
+import AddFlightTicketFormView from "./FlightTicketFormView";
 import flightTicketSchema from "../../../utils/form/validationSchema/FlightTicketSchema";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
+import { FlightTicket } from "../../../types/store.types";
 
 const FORM_TITLE = "Book your ticket for next flight!";
 const SUBMIT_BUTTON_TEXT = "Book";
@@ -21,19 +22,32 @@ type FormValues = {
   capacity: number;
 };
 
-const defaultValues: FormValues = {
-  flightCode: "",
-  date: dayjs(),
-  capacity: 200,
-};
-
 type Props = {
   isFormDialogOpen: boolean;
   handleCloseFormDialog: () => void;
+  editMode?: boolean;
+  ticketToEdit?: FlightTicket;
+  afterFormSubmission?: () => void;
 };
 
-export default function AddFlightTicketFormContainer(props: Props) {
-  const { isFormDialogOpen, handleCloseFormDialog } = props;
+export default function FlightTicketFormContainer(props: Props) {
+  const {
+    isFormDialogOpen,
+    handleCloseFormDialog,
+    editMode = false,
+    ticketToEdit,
+    afterFormSubmission,
+  } = props;
+  const defaultValues: FormValues = useMemo(
+    () => ({
+      flightCode: ticketToEdit?.flightCode || "",
+      date: ticketToEdit?.date
+        ? dayjs(ticketToEdit?.date, "DD/MM/YYYY")
+        : dayjs(),
+      capacity: ticketToEdit?.capacity || 200,
+    }),
+    []
+  );
   const {
     register,
     handleSubmit,
@@ -53,6 +67,12 @@ export default function AddFlightTicketFormContainer(props: Props) {
     console.log("dateString", dateString);
     const dateFromString = dayjs(dateString, "DD/MM/YYYY");
     console.log("dateFromString", dateFromString);
+    if (editMode) {
+      console.log("Edited");
+    } else {
+      console.log("Added");
+    }
+    afterFormSubmission?.();
   };
 
   const fields: Field<FormValues>[] = useMemo(

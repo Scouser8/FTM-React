@@ -1,7 +1,7 @@
 import { useState } from "react";
 import FlightTickets from "../Flights";
-import AddFlightTicketFormContainer from "../Forms/AddFlightTicketForm";
 import HomeHeader from "./HomeHeader";
+import FlightTicketFormContainer from "../Forms/FlightTicketForm";
 
 export default function Home() {
   const [isFormDialogOpen, setIsFormDialogOpen] = useState<boolean>(false);
@@ -15,7 +15,7 @@ export default function Home() {
       <HomeHeader openTicketForm={openFormDialog} />
       <FlightTickets />
       {isFormDialogOpen && (
-        <AddFlightTicketFormContainer
+        <FlightTicketFormContainer
           isFormDialogOpen={isFormDialogOpen}
           handleCloseFormDialog={closeFormDialog}
         />

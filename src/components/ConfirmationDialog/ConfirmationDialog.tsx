@@ -2,39 +2,36 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
 import {
   DEFAULT_CANCEL_BUTTON_TEXT,
   DEFAULT_SUBMIT_BUTTON_TEXT,
 } from "../../constants/dialog";
+import { Typography } from "@mui/material";
 
 type Props = {
   isDialogOpen: boolean;
   handleDialogClose: () => void;
-  form: React.ReactNode;
-  handleSubmit: (
-    e?: React.BaseSyntheticEvent<object, any, any> | undefined
-  ) => Promise<void>;
-  title: string;
+  confirmationMessage: string;
+  handleSubmit: () => void;
   submitText?: string;
   cancelText?: string;
 };
 
-export default function FormDialog(props: Props) {
+export default function ConfirmationDialog(props: Props) {
   const {
     isDialogOpen,
     handleDialogClose,
-    form,
+    confirmationMessage,
     handleSubmit,
-    title,
     submitText = DEFAULT_SUBMIT_BUTTON_TEXT,
     cancelText = DEFAULT_CANCEL_BUTTON_TEXT,
   } = props;
 
   return (
     <Dialog open={isDialogOpen} onClose={handleDialogClose}>
-      <DialogTitle>{title}</DialogTitle>
-      <DialogContent>{form}</DialogContent>
+      <DialogContent>
+        <Typography>{confirmationMessage}</Typography>
+      </DialogContent>
       <DialogActions>
         <Button onClick={handleDialogClose}>{cancelText}</Button>
         <Button onClick={handleSubmit}>{submitText}</Button>
