@@ -92,7 +92,7 @@ export default function FlightTickets() {
   return (
     <React.Fragment>
       <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
-        {tickets || noFlightsBookedYet}
+        {tickets?.length ? tickets : noFlightsBookedYet}
       </Box>
       {isEditDialogOpen && selectedTicket && (
         <FlightTicketFormContainer
