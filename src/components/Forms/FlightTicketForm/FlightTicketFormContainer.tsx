@@ -89,7 +89,6 @@ export default function FlightTicketFormContainer(props: Props) {
     ) {
       dispatch(getFlightTickets());
       afterFormSubmission?.();
-      handleCloseFormDialog();
     }
   }, [status]);
 

@@ -43,50 +43,50 @@ type UsersState = {
   user: User | null;
   token: string | null;
   status: string;
-  error: unknown;
+  error: string;
 };
 
 const initialState: UsersState = {
   user: null,
   token: null,
   status: "idle",
-  error: null,
+  error: "",
 };
 
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    logout: (state) => {
-      console.log("state", state.user);
-      state.user = null;
-      state.token = null;
-    },
+    logout: () => initialState,
   },
   extraReducers: (builder: ActionReducerMapBuilder<UsersState>) => {
     builder
       .addCase(userRegister.pending, (state) => {
         state.status = USER_AUTH_PENDING;
+        state.error = "";
       })
       .addCase(userRegister.fulfilled, (state) => {
         state.status = USER_REGISTRATION_SUCCESSFUL;
+        state.error = "";
       })
       .addCase(userRegister.rejected, (state, action) => {
         state.status = USER_AUTH_FAILED;
-        state.error = action.payload;
+        state.error = action.payload as string;
       })
       .addCase(userLogin.pending, (state) => {
         state.status = USER_AUTH_PENDING;
         state.token = null;
+        state.error = "";
       })
       .addCase(userLogin.fulfilled, (state, action) => {
         state.status = USER_LOGIN_SUCCESSFUL;
         state.user = action.payload?.user;
         state.token = action.payload?.accessToken;
+        state.error = "";
       })
       .addCase(userLogin.rejected, (state, action) => {
         state.status = USER_AUTH_FAILED;
-        state.error = action.payload;
+        state.error = action.payload as string;
       });
   },
 });

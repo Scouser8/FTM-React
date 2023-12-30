@@ -1,15 +1,21 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { Route, UserAuthForms } from "../../../types/router.types";
 import { APP_ROUTES } from "../../../constants/routes";
 
-import { getUser } from "../../../store/selectors/user";
+import { getUserSelector } from "../../../store/selectors/user";
 
 import { Grid, Paper } from "@mui/material";
 
 import Register from "./Register";
 import Login from "./Login";
 import { Navigate } from "react-router-dom";
+import {
+  USER_LOGIN_SUCCESSFUL,
+  USER_REGISTRATION_SUCCESSFUL,
+} from "../../../constants/thunk-status";
+import { showSnackbar } from "../../../store/actions/snackbar";
+import { ERROR, SUCCESS } from "../../../constants/snack-status";
 
 type Props = {
   route: Route;
@@ -20,9 +26,27 @@ const userAuthForms: UserAuthForms = {
   [APP_ROUTES.LOGIN]: <Login />,
 };
 
+const notifierMessage = {
+  login: "Logged In Successfully",
+  register: "Account created successfully, welcome to FTP",
+};
+
 function UserAuthentication(props: Props) {
   const { route } = props;
-  const { user } = useSelector(getUser);
+  const { user, status, error } = useSelector(getUserSelector);
+  const dispatch = useDispatch();
+
+  const loggedInSuccessfully = status === USER_LOGIN_SUCCESSFUL;
+  const registeredSuccessfully = status === USER_REGISTRATION_SUCCESSFUL;
+
+  if (loggedInSuccessfully || registeredSuccessfully) {
+    const message = loggedInSuccessfully
+      ? notifierMessage.login
+      : notifierMessage.register;
+    dispatch(showSnackbar({ message: message, status: SUCCESS }));
+  } else if (error) {
+    dispatch(showSnackbar({ message: error, status: ERROR }));
+  }
 
   if (user) {
     return <Navigate to={APP_ROUTES.HOME} replace />;

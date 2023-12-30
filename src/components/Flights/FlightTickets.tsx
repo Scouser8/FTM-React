@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { Box, Typography } from "@mui/material";
 import FlightTicketCard from "./FlightTicketCard";
@@ -15,6 +15,8 @@ import {
   FLIGHT_TICKETS_DELETED_SUCCESSFULLY,
   FLIGHT_TICKETS_INITIAL,
 } from "../../constants/thunk-status";
+import { showSnackbar } from "../../store/actions/snackbar";
+import { INFO, SUCCESS } from "../../constants/snack-status";
 
 const DELETE_CONFIRMATION_MESSAGE =
   "Are you sure you want to delete this Ticket?";
@@ -44,11 +46,29 @@ export default function FlightTickets() {
     setIsEditDialogOpen(false);
   };
 
+  const onEditSuccess = () => {
+    dispatch(
+      showSnackbar({
+        message: "Ticket Updated Successfully!",
+        status: SUCCESS,
+      })
+    );
+    handleCloseEditDialog();
+  };
+
   const handleOpenDeleteDialog = () => setIsDeleteDialogOpen(true);
-  const handleCloseDeleteDialog = () => {
+  const handleCloseDeleteDialog = useCallback(() => {
     setSelectedTicket(undefined);
     setIsDeleteDialogOpen(false);
-  };
+    if (status === FLIGHT_TICKETS_DELETED_SUCCESSFULLY) {
+      dispatch(
+        showSnackbar({
+          message: "Ticket Deleted Successfully",
+          status: INFO,
+        })
+      );
+    }
+  }, [status]);
 
   const handleDeleteSubmit = () => {
     if (selectedTicket?.id) {
@@ -80,7 +100,7 @@ export default function FlightTickets() {
           handleCloseFormDialog={handleCloseEditDialog}
           editMode
           ticketToEdit={selectedTicket}
-          afterFormSubmission={handleCloseEditDialog}
+          afterFormSubmission={onEditSuccess}
         />
       )}
       <ConfirmationDialog

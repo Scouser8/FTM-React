@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-
 import MIUSnackbar from "@mui/material/Snackbar";
 import { Alert } from "@mui/material";
 import {
@@ -7,6 +5,8 @@ import {
   SnackSeverity,
   VerticalAlignment,
 } from "../../types/snackbar.types";
+import { useDispatch } from "react-redux";
+import { hideSnackbar } from "../../store/actions/snackbar";
 
 type Props = {
   message: string;
@@ -21,28 +21,27 @@ function Snackbar(props: Props) {
     message,
     status = "info",
     timeout = 5000,
-    vertical = "top",
+    vertical = "bottom",
     horizontal = "right",
   } = props;
-  const [open, setOpen] = useState<boolean>();
 
-  const handleClose = () => setOpen(false);
+  const dispatch = useDispatch();
+
+  const handleClose = () => dispatch(hideSnackbar());
 
   return (
-    <React.Fragment>
-      <MIUSnackbar
-        anchorOrigin={{ vertical, horizontal }}
-        open={open}
-        onClose={handleClose}
-        message={message}
-        key={vertical + horizontal}
-        autoHideDuration={timeout}
-      >
-        <Alert onClose={handleClose} severity={status} sx={{ width: "100%" }}>
-          {message}
-        </Alert>
-      </MIUSnackbar>
-    </React.Fragment>
+    <MIUSnackbar
+      anchorOrigin={{ vertical, horizontal }}
+      open
+      onClose={handleClose}
+      message={message}
+      key={vertical + horizontal}
+      autoHideDuration={timeout}
+    >
+      <Alert onClose={handleClose} severity={status} sx={{ width: "100%" }}>
+        {message}
+      </Alert>
+    </MIUSnackbar>
   );
 }
 

@@ -66,64 +66,71 @@ export const deleteFlightTicket = createAsyncThunk(
   }
 );
 
-type UsersState = {
+type FlighTicketsState = {
   flightTickets: FlightTicket[] | null;
   status: string;
-  error: unknown;
+  error: string;
 };
 
-const initialState: UsersState = {
+const initialState: FlighTicketsState = {
   flightTickets: null,
   status: FLIGHT_TICKETS_INITIAL,
-  error: null,
+  error: "",
 };
 
 const flightTicketsSlice = createSlice({
   name: "flightTickets",
   initialState,
   reducers: {},
-  extraReducers: (builder: ActionReducerMapBuilder<UsersState>) => {
+  extraReducers: (builder: ActionReducerMapBuilder<FlighTicketsState>) => {
     builder
       .addCase(getFlightTickets.pending, (state) => {
         state.status = FLIGHT_TICKETS_PENDING;
+        state.error = "";
       })
       .addCase(getFlightTickets.fulfilled, (state, action) => {
         state.status = FLIGHT_TICKETS_FETCHED_SUCCESSFULLY;
         state.flightTickets = action.payload;
+        state.error = "";
       })
       .addCase(getFlightTickets.rejected, (state, action) => {
         state.status = FLIGHT_TICKETS_FAILED;
-        state.error = action.payload;
+        state.error = action.payload as string;
       })
       .addCase(createFlightTicket.pending, (state) => {
         state.status = FLIGHT_TICKETS_PENDING;
+        state.error = "";
       })
       .addCase(createFlightTicket.fulfilled, (state) => {
         state.status = FLIGHT_TICKETS_CREATED_SUCCESSFULLY;
       })
       .addCase(createFlightTicket.rejected, (state, action) => {
         state.status = FLIGHT_TICKETS_FAILED;
-        state.error = action.payload;
+        state.error = action.payload as string;
       })
       .addCase(updateFlightTicket.pending, (state) => {
         state.status = FLIGHT_TICKETS_PENDING;
+        state.error = "";
       })
       .addCase(updateFlightTicket.fulfilled, (state) => {
         state.status = FLIGHT_TICKETS_UPDATED_SUCCESSFULLY;
+        state.error = "";
       })
       .addCase(updateFlightTicket.rejected, (state, action) => {
         state.status = FLIGHT_TICKETS_FAILED;
-        state.error = action.payload;
+        state.error = action.payload as string;
       })
       .addCase(deleteFlightTicket.pending, (state) => {
         state.status = FLIGHT_TICKETS_PENDING;
+        state.error = "";
       })
-      .addCase(deleteFlightTicket.fulfilled, (state, action) => {
+      .addCase(deleteFlightTicket.fulfilled, (state) => {
         state.status = FLIGHT_TICKETS_DELETED_SUCCESSFULLY;
+        state.error = "";
       })
       .addCase(deleteFlightTicket.rejected, (state, action) => {
         state.status = FLIGHT_TICKETS_FAILED;
-        state.error = action.payload;
+        state.error = action.payload as string;
       });
   },
 });

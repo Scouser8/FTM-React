@@ -9,7 +9,7 @@ import userLoginSchema from "../../../../utils/form/validationSchema/UserLoginSc
 import { useDispatch, useSelector } from "react-redux";
 import { userLogin } from "../../../../store/userSlice";
 import { AppDispatch } from "../../../../types/store.types";
-import { getUser } from "../../../../store/selectors/user";
+import { getUserSelector } from "../../../../store/selectors/user";
 import { USER_AUTH_PENDING } from "../../../../constants/thunk-status";
 
 type FormValues = {
@@ -35,7 +35,7 @@ export default function LoginFormContainer() {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const { status } = useSelector(getUser);
+  const { status } = useSelector(getUserSelector);
 
   const isSubmitting = status === USER_AUTH_PENDING;
 
