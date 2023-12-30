@@ -13,12 +13,13 @@ const flightTickets = [
 export default function FlightTickets() {
   const tickets = flightTickets.map((ticket) => (
     <FlightTicketCard
+      key={ticket.flightCode}
       flightCode={ticket.flightCode}
       date={ticket.date}
       capacity={ticket.capacity}
     />
   ));
   return (
-    <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap", justifyContent:'center' }}>{tickets}</Box>
+    <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap" }}>{tickets}</Box>
   );
 }

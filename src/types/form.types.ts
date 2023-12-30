@@ -1,4 +1,4 @@
-type InputType = "text" | "password" | "number";
+type InputType = "text" | "password" | "number" | "date";
 
 export type Field<FormValues> = {
   fieldProps: {

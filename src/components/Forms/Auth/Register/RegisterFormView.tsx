@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import UserFormFooter from "../UserFormFooter";
 
 import { APP_ROUTES } from "../../../../constants/routes";
+import { Stack } from "@mui/material";
 
 type Props = {
   fields: JSX.Element[];
