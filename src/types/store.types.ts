@@ -4,6 +4,7 @@ export type User = {
   email: string;
   firstName: string;
   lastName: string;
+  password?: string;
 };
 
 export type FlightTicket = {
@@ -14,4 +15,4 @@ export type FlightTicket = {
 
 export type RootState = ReturnType<typeof store.getState>;
 
-export type AppDispatch = typeof store.dispatch
+export type AppDispatch = typeof store.dispatch;

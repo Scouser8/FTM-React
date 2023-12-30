@@ -19,10 +19,11 @@ type Props = {
   handleSubmit: (
     e?: React.BaseSyntheticEvent<object, any, any> | undefined
   ) => Promise<void>;
+  isSubmitting: boolean;
 };
 
 function LoginFormView(props: Props) {
-  const { fields, handleSubmit } = props;
+  const { fields, handleSubmit, isSubmitting } = props;
 
   return (
     <Box
@@ -51,6 +52,7 @@ function LoginFormView(props: Props) {
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
+          disabled={isSubmitting}
         >
           Sign In
         </Button>

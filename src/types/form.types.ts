@@ -9,3 +9,10 @@ export type Field<FormValues> = {
   };
   wrapperProps?: { gridSize: { md: number } };
 };
+
+export type UserLoginInfo = { email: string; password: string };
+
+export type UserRegisterInfo = UserLoginInfo & {
+  firstName: string;
+  lastName: string;
+};

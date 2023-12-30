@@ -6,6 +6,11 @@ import LoginFormView from "./LoginFormView";
 import { Field } from "../../../../types/form.types";
 import { yupResolver } from "@hookform/resolvers/yup";
 import userLoginSchema from "../../../../utils/form/validationSchema/UserLoginSchema";
+import { useDispatch, useSelector } from "react-redux";
+import { userLogin } from "../../../../store/userSlice";
+import { AppDispatch } from "../../../../types/store.types";
+import { getUser } from "../../../../store/selectors/user";
+import { USER_AUTH_PENDING } from "../../../../constants/thunk-status";
 
 type FormValues = {
   email: string;
@@ -28,11 +33,17 @@ export default function LoginFormContainer() {
   });
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { status } = useSelector(getUser);
+
+  const isSubmitting = status === USER_AUTH_PENDING;
+
   const handleToggleShowPassword = () =>
     setShowPassword((prevState) => !prevState);
 
   const onSubmit = (data: FormValues) => {
-    console.log(data);
+    dispatch(userLogin(data));
   };
 
   const fields: Field<FormValues>[] = useMemo(
@@ -70,6 +81,10 @@ export default function LoginFormContainer() {
   ));
 
   return (
-    <LoginFormView handleSubmit={handleSubmit(onSubmit)} fields={formFields} />
+    <LoginFormView
+      handleSubmit={handleSubmit(onSubmit)}
+      fields={formFields}
+      isSubmitting={isSubmitting}
+    />
   );
 }

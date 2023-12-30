@@ -11,10 +11,11 @@ import {
   USER_LOGIN_SUCCESSFUL,
   USER_REGISTRATION_SUCCESSFUL,
 } from "../constants/thunk-status";
+import { UserLoginInfo, UserRegisterInfo } from "../types/form.types";
 
 export const userRegister = createAsyncThunk(
   "user/add",
-  async (newUser: User, thunkAPI) => {
+  async (newUser: UserRegisterInfo, thunkAPI) => {
     try {
       const res = await axios.post("/signup", newUser);
       return res.data;
@@ -26,7 +27,7 @@ export const userRegister = createAsyncThunk(
 
 export const userLogin = createAsyncThunk(
   "user/login",
-  async (userInfo, thunkAPI) => {
+  async (userInfo: UserLoginInfo, thunkAPI) => {
     try {
       const res = await axios.post("login", userInfo);
       return res.data;
