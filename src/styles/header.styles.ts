@@ -6,6 +6,9 @@ const headerStyles = {
   textAlign: "center",
   fontSize: 20,
   fontWeight: "bold",
+  position: "sticky",
+  top: 0,
+  zIndex: 99,
 };
 
 export default headerStyles;
