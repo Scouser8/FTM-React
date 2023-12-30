@@ -54,7 +54,13 @@ const initialState: UsersState = {
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    logout: (state) => {
+      console.log("state", state.user);
+      state.user = null;
+      state.token = null;
+    },
+  },
   extraReducers: (builder: ActionReducerMapBuilder<UsersState>) => {
     builder
       .addCase(userRegister.pending, (state) => {
