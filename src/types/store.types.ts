@@ -8,8 +8,9 @@ export type User = {
 };
 
 export type FlightTicket = {
+  id?: string | number;
   flightCode: string;
-  date: any;
+  date?: any;
   capacity: number;
 };
 

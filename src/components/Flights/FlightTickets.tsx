@@ -1,45 +1,62 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import FlightTicketCard from "./FlightTicketCard";
 import ConfirmationDialog from "../ConfirmationDialog";
-import { FlightTicket } from "../../types/store.types";
+import { AppDispatch, FlightTicket } from "../../types/store.types";
 import FlightTicketFormContainer from "../Forms/FlightTicketForm";
-
-const flightTickets: FlightTicket[] = [
-  { flightCode: "150", date: "30/12/2023", capacity: 200 },
-  { flightCode: "151", date: "01/01/2024", capacity: 300 },
-  { flightCode: "152", date: "01/01/2024", capacity: 150 },
-  { flightCode: "153", date: "02/01/2024", capacity: 220 },
-  { flightCode: "154", date: "05/01/2024", capacity: 250 },
-  { flightCode: "155", date: "06/01/2024", capacity: 180 },
-];
+import { useDispatch, useSelector } from "react-redux";
+import {
+  deleteFlightTicket,
+  getFlightTickets,
+} from "../../store/flightTicketsSlice";
+import { flightTicketsSelector } from "../../store/selectors/flightTickets";
+import {
+  FLIGHT_TICKETS_DELETED_SUCCESSFULLY,
+  FLIGHT_TICKETS_INITIAL,
+} from "../../constants/thunk-status";
 
 const DELETE_CONFIRMATION_MESSAGE =
   "Are you sure you want to delete this Ticket?";
 
 export default function FlightTickets() {
-  const [selectedTicket, setSelectedTicket] = useState<FlightTicket | null>();
+  const [selectedTicket, setSelectedTicket] = useState<FlightTicket>();
   const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
 
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { flightTickets, status } = useSelector(flightTicketsSelector);
+
+  useEffect(() => {
+    if (
+      status === FLIGHT_TICKETS_INITIAL ||
+      status === FLIGHT_TICKETS_DELETED_SUCCESSFULLY
+    ) {
+      dispatch(getFlightTickets());
+      handleCloseDeleteDialog();
+    }
+  }, [status]);
+
   const handleOpenEditDialog = () => setIsEditDialogOpen(true);
   const handleCloseEditDialog = () => {
-    setSelectedTicket(null);
+    setSelectedTicket(undefined);
     setIsEditDialogOpen(false);
   };
 
   const handleOpenDeleteDialog = () => setIsDeleteDialogOpen(true);
   const handleCloseDeleteDialog = () => {
-    setSelectedTicket(null);
+    setSelectedTicket(undefined);
     setIsDeleteDialogOpen(false);
   };
 
   const handleDeleteSubmit = () => {
-    handleCloseDeleteDialog();
+    if (selectedTicket?.id) {
+      dispatch(deleteFlightTicket(selectedTicket?.id));
+    }
   };
 
-  const tickets = flightTickets.map((ticket) => (
+  const tickets = flightTickets?.map((ticket) => (
     <FlightTicketCard
       key={ticket.flightCode}
       ticket={ticket}
@@ -48,9 +65,15 @@ export default function FlightTickets() {
       openDeleteConfitmation={handleOpenDeleteDialog}
     />
   ));
+
+  const noFlightsBookedYet = (
+    <Typography variant="h5">There are no Flights booked yet!</Typography>
+  );
   return (
     <React.Fragment>
-      <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap" }}>{tickets}</Box>
+      <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
+        {tickets || noFlightsBookedYet}
+      </Box>
       {isEditDialogOpen && selectedTicket && (
         <FlightTicketFormContainer
           isFormDialogOpen={isEditDialogOpen}

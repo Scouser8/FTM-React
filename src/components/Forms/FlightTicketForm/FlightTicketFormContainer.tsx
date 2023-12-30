@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -7,11 +7,22 @@ import { Field } from "../../../types/form.types";
 
 import TextField from "@mui/material/TextField";
 
-import AddFlightTicketFormView from "./FlightTicketFormView";
+import FlightTicketFormView from "./FlightTicketFormView";
 import flightTicketSchema from "../../../utils/form/validationSchema/FlightTicketSchema";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
-import { FlightTicket } from "../../../types/store.types";
+import { AppDispatch, FlightTicket } from "../../../types/store.types";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  createFlightTicket,
+  getFlightTickets,
+  updateFlightTicket,
+} from "../../../store/flightTicketsSlice";
+import { flightTicketsSelector } from "../../../store/selectors/flightTickets";
+import {
+  FLIGHT_TICKETS_CREATED_SUCCESSFULLY,
+  FLIGHT_TICKETS_UPDATED_SUCCESSFULLY,
+} from "../../../constants/thunk-status";
 
 const FORM_TITLE = "Book your ticket for next flight!";
 const SUBMIT_BUTTON_TEXT = "Book";
@@ -58,21 +69,34 @@ export default function FlightTicketFormContainer(props: Props) {
   });
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { status } = useSelector(flightTicketsSelector);
+
+  useEffect(() => {
+    if (
+      status === FLIGHT_TICKETS_CREATED_SUCCESSFULLY ||
+      status === FLIGHT_TICKETS_UPDATED_SUCCESSFULLY
+    ) {
+      dispatch(getFlightTickets());
+      afterFormSubmission?.();
+      handleCloseFormDialog();
+    }
+  }, [status]);
+
   const handleToggleShowPassword = () =>
     setShowPassword((prevState) => !prevState);
 
   const onSubmit = (data: FormValues) => {
-    console.log(data);
     const dateString = dayjs(data.date).format("DD/MM/YYYY");
-    console.log("dateString", dateString);
-    const dateFromString = dayjs(dateString, "DD/MM/YYYY");
-    console.log("dateFromString", dateFromString);
-    if (editMode) {
-      console.log("Edited");
+    const payload: FlightTicket = { ...data, date: dateString };
+    if (editMode && ticketToEdit?.id) {
+      dispatch(
+        updateFlightTicket({ flightTicket: payload, id: ticketToEdit?.id })
+      );
     } else {
-      console.log("Added");
+      dispatch(createFlightTicket(payload));
     }
-    afterFormSubmission?.();
   };
 
   const fields: Field<FormValues>[] = useMemo(
@@ -126,7 +150,7 @@ export default function FlightTicketFormContainer(props: Props) {
   );
 
   return (
-    <AddFlightTicketFormView
+    <FlightTicketFormView
       isFormDialogOpen={isFormDialogOpen}
       handleCloseFormDialog={handleCloseFormDialog}
       handleSubmit={handleSubmit(onSubmit)}

@@ -12,7 +12,7 @@ export default function Home() {
   const closeFormDialog = () => setIsFormDialogOpen(false);
 
   return (
-    <Box sx={{ px: 10, py: 5 }}>
+    <Box sx={{ px: 10, py: 5, minHeight: "90vh" }}>
       <HomeHeader openTicketForm={openFormDialog} />
       <FlightTickets />
       {isFormDialogOpen && (
