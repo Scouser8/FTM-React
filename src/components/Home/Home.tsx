@@ -5,7 +5,7 @@ import FlightTicketFormContainer from "../Forms/FlightTicketForm";
 import { Box } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { showSnackbar } from "../../store/actions/snackbar";
-import { SUCCESS } from "../../constants/snack-status";
+import { SUCCESS } from "../../constants/snackbar";
 
 export default function Home() {
   const [isFormDialogOpen, setIsFormDialogOpen] = useState<boolean>(false);

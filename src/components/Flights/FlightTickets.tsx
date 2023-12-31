@@ -16,7 +16,7 @@ import {
   FLIGHT_TICKETS_INITIAL,
 } from "../../constants/thunk-status";
 import { showSnackbar } from "../../store/actions/snackbar";
-import { INFO, SUCCESS } from "../../constants/snack-status";
+import { INFO, SUCCESS } from "../../constants/snackbar";
 
 const DELETE_CONFIRMATION_MESSAGE =
   "Are you sure you want to delete this Ticket?";

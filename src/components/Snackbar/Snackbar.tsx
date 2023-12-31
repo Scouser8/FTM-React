@@ -7,6 +7,12 @@ import {
 } from "../../types/snackbar.types";
 import { useDispatch } from "react-redux";
 import { hideSnackbar } from "../../store/actions/snackbar";
+import {
+  AUTO_HIDE_DURATION_MS,
+  DEFAULT_HORIZONTAL_ALIGNMENT,
+  DEFAULT_STATUS,
+  DEFAULT_VERTICAL_ALIGNMENT,
+} from "../../constants/snackbar";
 
 type Props = {
   message: string;
@@ -19,10 +25,10 @@ type Props = {
 function Snackbar(props: Props) {
   const {
     message,
-    status = "info",
-    timeout = 5000,
-    vertical = "bottom",
-    horizontal = "right",
+    status = DEFAULT_STATUS,
+    timeout = AUTO_HIDE_DURATION_MS,
+    vertical = DEFAULT_VERTICAL_ALIGNMENT,
+    horizontal = DEFAULT_HORIZONTAL_ALIGNMENT,
   } = props;
 
   const dispatch = useDispatch();

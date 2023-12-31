@@ -12,7 +12,7 @@ import { AppDispatch } from "../../../../types/store.types";
 import { getUserSelector } from "../../../../store/selectors/user";
 import { USER_AUTH_PENDING } from "../../../../constants/thunk-status";
 import { showSnackbar } from "../../../../store/actions/snackbar";
-import { ERROR, SUCCESS } from "../../../../constants/snack-status";
+import { ERROR, SUCCESS } from "../../../../constants/snackbar";
 
 type FormValues = {
   email: string;
